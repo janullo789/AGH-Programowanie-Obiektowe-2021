@@ -1,0 +1,55 @@
+Etap 1
+
+Wybrałem temat 2, ponieważ uznałem, że założenie własnej fabryki z samochodami będzie dla mnie o wiele ciekawsze, niż firma z pracownikami, a to będzie skutkowało, że czas spędzony podczas pisania programu będzie przyjemniejszy.
+
+W pliku main.cpp zrobiłem proste menu wyboru, które było oparte na instrukcji switch ... case. Warunkiem instrukcji była zmienna char. Dzięki temu w momencie gdy użytkownik poda literę zamiast cyfry program się nie wywróci, tak jak by miało to miejsce w przypadku zmiennej int. Dodatkowo wszystko było zawarte w pętli do ... while, tak aby użytkownik miał parę szans na podanie wartości z zakresu menu. Na początku działanie programu program pyta użytkownika czy wczytać dane z pliku. Na końcu działania programu lista samochodów oraz budżet fabryki są zapisywane do dwóch osobnych plików.
+Plik Fabryka.h zawiera klasę, zawierającą metody, konstruktor oraz dwie prywatne zmienne (budżet firmy oraz wektor w którym zapisane są samochody).
+
+Plik Fabryka.cpp zawiera ciała metod oraz konstruktora.
+•	zamowienie() – pozwala użytkownikowi na stworzenie swojego auta. Użytkownik ma do wyboru parę modeli oraz może określić moc silnika. Od jego decyzji zostanie uzależniona cena, średnie spalenie, pojemność baku. W momencie tworzenie samochodu budżet firmy maleje, jednak nie o cenę auta tylko o kwotę odpowiednio pomniejszoną (tak aby firma była rentowna).
+•	pokaz() – pozwala na pokazanie wszystkich aut znajdujących się na parkingu (w wektorze). Za pomocą pętli for wypisujemy je po kolei na ekranie.
+•	sprzedaj() – usuwa auto z parkingu dodatkowo podnosząc budżet firmy o cenę usuniętego auta.
+•	jazdaSamochodem() oraz tankownieSamochodu() – wywołują odpowiednie metody z klasy Samochod
+•	zapis() – metoda zapisuje dane z wektora do pliku parking.txt. Jeżeli wcześniej w pliku były jakieś stare dane, to je usuwa. Jeśli nie było wcześniej pliku to go tworzy. Wykorzystuje przeładowany operator <<.Następnie operacja jest powtórzona dla budżetu.
+•	wczytaj() – wczytuje samochody zapisane w pliku do wektora, a następnie wczytuje wartość budżetu z pliku budżet.txt
+•	sprawdzId() – metoda sprawdzająca czy podany nr auta w innych metoda jest przypisany do jakiegoś auta.
+Plik Samochod.h zawiera klasę, zawierającą metody, przeładowania, oraz prywatne zmienne określające parametry samochodu.
+
+Plik Samochod.cpp zawiera ciała metod, konstruktora oraz przeładowania.
+•	Konstruktor przyjmuje wartości domyślne dla przebiegu i paliwa. Są one ustawiane w momencie produkcji samochodu. W sytuacji, gdy wczytujemy samochody z pliku wartości domyślne nie są brane pod uwagę.
+•	jazda() – zwiększa przebieg oraz zmniejsza poziom paliwa.
+•	tankuj() – zwieksza poziom paliwa
+•	zwrocCene() – zwraca cena samochodu
+•	Dwa przeładowania operatora <<. Jedno wykorzystane podczas wyświetlania, a drugie podczas zapisywania do pliku
+
+Etap 2 i 3
+
+W pliku main.cpp rozbudowałem menu wyboru. Początkowo użytkownik musi wybrać czy chce pracować na fabryce czy komisie, jednak w każdej chwili może to zmienić. Nie zdecydowałem się na dodanie paru fabryk/komisów, bo uznałem, że nie wniesie to programu niczego nowego co mogłoby być warte uwagi. W pliku main.cpp znalazł się również wektor o nazwie parkingMiasto. Przechowuje on pojazdy silnikowe które zostały sprzedane, zarówno przez fabrykę jak i komis. Zależało mi, aby użytkownik po wczytaniu danych z plików mógł pracować na takich samych danych jakie były w momencie zamknięcia pliku. Dzięki temu nie musi tracić czasu na ponowne wpisane danych.
+Funkcja która wczytuje dane z pliku parkingMiasto.txt, na początku sprawdza jakiego rodzaju jest pojazd silnikowy (samochód czy motocykl), a potem dodaje je do wektora.
+Funkcja malowanie() odbiera pojazd od fabryki, przekazuje go lakiernikowi, następnie odbiera go od niego i pojazd znów wraca do fabryki (gdzie parkuje na końcu wektora). Jest to rozwiązane w ten sposób, gdyż chciałem zasymulować sytuacje tak jak by miała on miejsce w realnym świecie. W rzeczywistości pojazd też musi opuścić fabrykę, wyjechać na miasto, dojechać do lakiernika i wrócić po wszystkim do fabryki.
+Funkcja szablonowa wielkoscParkingu() przyjmuje obiekt klasy Fabryka lub Komis, po czym wypisuje ilość pojazdów, która jest w danym obiekcie.
+Wektor przechowuję inteligentne wskaźniki (unique_ptr) dzięki temu bez problemu możemy przechowywać bez problemu samochody, motocykle i rowery.
+Najwięcej problemu sprawiło mi wczytywanie argumentów z plików stdin. Nie za bardzo wiedziałem jak się do tego zabrać i jak to ma wyglądać. W Opus Magnum nie znalazłem nic co by mi pomogło. Nie za bardzo wiedziałem też jakich fraz powinienem używać, aby znaleźć podobny przykład w internecie. Akutalnie program można uruchomić z komedami znajdującymi się w pliku poprzez kompilacje programu przez wiersz poleceń, a następnie wpisanie komendy "a.exe < stdin1.txt" (gdzie a.exe to plik który powstał podczas kompilacji).
+Dodatkowo udało mi się znaleźć artykuł którym był przedstawiony inny sposób. Zainsprowałem się im i dodałem go do programu. Poświeciłem sporo czasu, aby zrozumieć ten kod, jednak wciąż nie mam pewności czy o to chodziło w poleceniu, więc uznałem, że go nie użyje i go zakomentowałem tak aby był do ewentualnego wglądu przez Pana (na końcu main.cpp). W każdym razie jest możliwość odpalenia programu z argumentami z pliku, jednak aby to zrobić trzeba skompilować program w wierszu poleceń, a następnie gdy mamy już utworzony plik .exe wpisać frazę "a.exe "-i" stdin1.txt" (gdzie a.exe to ów plik .exe, a stdin1.txt to plik z komendami).
+
+Klasa Fabryka nie uległa diametralnym zmianą względem pierwszego etapu. Miedzy innymi zostały dodane możliwości do stworzenia Motocyklu i Roweru. Funkcja sprzedaj jest typu bool. Funkcja zwraca TRUE w momencie gdy został sprzedany pojazd silnikowy który musi być zapisany w wektorze parkingMiasto.
+
+Klasa Komis w zamian za metodę produkowania pojazdu, ma możliwość kupowania pojazdów znajdujących się w wektorze miastoParking.
+
+Klasa Lakiernik ma możliwość zmienny koloru pojazdu. Posiada dwa unikatowe kolory które nie są dostępne dla Fabryki.
+
+Klasa Pojazd jest klasa bazową dla klas Rower i PojazdSilinkowy, dodatkowo Samochód i Motoycykl dziedziczą z PojazdSilnikowy (i tym samym z Pojazd). Klasa Pojazd zawiera cztery metody wirtualne.
+Metoda szablonowa zwroc() zwraca prywatne elementy klasy (dokładniejszy opis metody opisany jest w komentarzach). Zdefiniowałem ją w pliku .h, ponieważ podczas definiowania w pliku .cpp linker miał problem z ogarnięciem tego. 
+Metoda kontrolaTypuINT sprawdza czy odebrana wartość może być typu INT. Do funkcji przesyłamy zmienną typu string, która gdy wszystko pójdzie pomyślnie jest zmieniana na typ INT. Sprawdzane jest czy wartość może być typu INT oraz czy nie jest ona poza zakresem INT.
+
+Klasa Rower posiada funkcje sprawdzającą czy podana ilość kilometrów do przejechania jest nieujemna oraz typu INT.
+
+Klasa PojazdSilnikowy dodaje składowe dla pojazdów silnikowych. Dodatkowo posiada metody sprawdzające czy użytkownik chce przejechać/zatankować ilość kilometrów/litrów która nie jest ujemna i jest typu INT.
+
+Klasa Samochód nie różni się mocno od tej z etapu pierwszego z tym, że jest rozbudowana o wyjątki wcześniej już opisane.
+
+Klasa Motocykl jest mocno zbliżona do klasy Samochód z tym, że nie ma składowej opowiadającej z ilość drzwi.
+
+plik stdin1.txt zawiera komendy które nie wywołują wątków, natomiast stdin2.txt pokazuje działanie wyjątków.
+
+Zdaję sobie sprawę, że program może nie być najlogiczniej napisany pod względem rozwiązywania niektórych problemów. Nie korzystałem z pomocy korepetytora, który mógłby mnie nakierowywać na sposób rozwiązania problemu, ponieważ uznałem, że więcej wyciągnę z tego jeśli spędzę więcej czasu przeszukując internet, pisząc program metodą prób i błedów, ale tym samym odpowiadając sobie na pytanie dlaczego coś nie działa tak jakby mogłoby mi się to wydawać. Dążyłem do tego, aby każdy z elementów działał prawidłowo.
